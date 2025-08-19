@@ -13,6 +13,8 @@ type RegisterRequest struct {
 	ConfirmPassword string `json:"confirm_password"`
 	Email           string `json:"email"`
 	Phone           string `json:"phone"`
+	CaptchaID       string `json:"captcha_id"`
+	CaptchaValue    string `json:"captcha_value"`
 }
 
 type LoginRequest struct {
@@ -31,6 +33,14 @@ func UserRegister(ctx *gin.Context) {
 	}
 	//TODO:验证码的校验
 	svc := service.NewUserService()
+	captchaSvc := service.NewCaptchaService()
+	if !captchaSvc.VerifyCaptcha(req.CaptchaID, req.CaptchaValue) {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"code":    -1,
+			"message": "验证码错误",
+		})
+		return
+	}
 	//验证密码两次是否一致
 	if req.Password != req.ConfirmPassword {
 		ctx.JSON(http.StatusBadRequest, gin.H{
