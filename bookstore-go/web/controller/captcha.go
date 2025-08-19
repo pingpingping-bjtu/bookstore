@@ -7,11 +7,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type CaptchaController struct {
+	CaptchaService *service.CaptchaService
+}
+
+func NewCaptchaController() *CaptchaController {
+	return &CaptchaController{CaptchaService: service.NewCaptchaService()}
+}
+
 // GenerateCaptcha   生成图形验证码
-func GenerateCaptcha(ctx *gin.Context) {
+func (c *CaptchaController) GenerateCaptcha(ctx *gin.Context) {
 	//生成图形验证码
-	captchaSvc := service.NewCaptchaService()
-	res, err := captchaSvc.GenerateCaptcha()
+	res, err := c.CaptchaService.GenerateCaptcha()
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"code":    -1,

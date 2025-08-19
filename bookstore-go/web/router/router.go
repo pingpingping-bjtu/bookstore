@@ -2,18 +2,13 @@ package router
 
 import (
 	"bookstore-manager/web/controller"
+	"bookstore-manager/web/middleware"
 
 	"github.com/gin-gonic/gin"
 )
 
 func InitRouter() *gin.Engine {
 	r := gin.Default()
-	//r.GET("/test", func(context *gin.Context) {
-	//	context.JSON(http.StatusOK, gin.H{
-	//		"data":  "hello",
-	//		"error": "none",
-	//	})
-	//})
 
 	// 添加CORS中间件
 	r.Use(func(c *gin.Context) {
@@ -31,19 +26,29 @@ func InitRouter() *gin.Engine {
 
 		c.Next()
 	})
-
+	userController := controller.NewUserController()
+	captchaController := controller.NewCaptchaController()
 	v1 := r.Group("api/v1")
 	{
 		user := v1.Group("/user")
 		{
-			user.POST("/register", controller.UserRegister)
-			user.POST("/login", controller.UserLogin)
+			user.POST("/register", userController.UserRegister)
+			user.POST("/login", userController.UserLogin)
 		}
+		auth := user.Group("")
+		{
+			auth.Use(middleware.JWTAuthMiddleware())
+			{
+				auth.GET("/profile", userController.GetUserProfile)
+				auth.PUT("/profile", userController.UpdateUserProfile)
+			}
+		}
+
 	}
 	//验证图形验证码
 	captcha := v1.Group("/captcha")
 	{
-		captcha.GET("/generate", controller.GenerateCaptcha)
+		captcha.GET("/generate", captchaController.GenerateCaptcha)
 
 	}
 	return r

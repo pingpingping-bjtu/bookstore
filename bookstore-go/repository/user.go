@@ -52,3 +52,29 @@ func (u *UserDAO) CheckUserExists(username, phone, email string) (bool, error) {
 	}
 	return count > 0, nil
 }
+
+func (u *UserDAO) GetUserByUsername(username string) (*model.User, error) {
+	var user *model.User
+	err := u.db.Debug().Where("username=?", username).First(&user).Error
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
+
+}
+
+func (u *UserDAO) GetUserByID(userID int) (*model.User, error) {
+	var user *model.User
+	err := u.db.Debug().Where("id=?", userID).First(&user).Error
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
+}
+
+func (u *UserDAO) UpdateUser(user *model.User) error {
+	if err := u.db.Debug().Save(user).Error; err != nil {
+		return err
+	}
+	return nil
+}

@@ -3,7 +3,7 @@ package model
 import "time"
 
 type Book struct {
-	ID          int       `json:"id"`
+	ID          int       `gorm:"primaryKey" json:"id"`
 	Title       string    `json:"title"`       //书名
 	Author      string    `json:"author"`      //作者
 	Price       string    `json:"price"`       //价格
@@ -19,6 +19,11 @@ type Book struct {
 	Language    string    `json:"language"`  //语言
 	Format      string    `json:"format"`    //装订本
 	CategoryID  string    `json:"category_id"`
+	Sale        int       `json:"sale"`
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
+}
+
+func (b *Book) TableName() string {
+	return "books"
 }
