@@ -16,6 +16,7 @@ func NewUserDAO() *UserDAO {
 		db: global.GetDB(),
 	}
 }
+
 func (u *UserDAO) CreateUser(user *model.User) error {
 	if err := u.db.Debug().Create(user).Error; err != nil {
 		return err
@@ -23,6 +24,7 @@ func (u *UserDAO) CreateUser(user *model.User) error {
 	return nil
 }
 
+// CheckUserExists 检查user是否存在
 func (u *UserDAO) CheckUserExists(username, phone, email string) (bool, error) {
 	var count int64
 	err := u.db.Model(&model.User{}).Where("username=?", username).Count(&count).Error

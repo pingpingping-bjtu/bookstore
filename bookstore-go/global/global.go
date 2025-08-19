@@ -15,6 +15,7 @@ import (
 var DBClient *gorm.DB
 var RedisClient *redis.Client
 
+// InitMysql 数据库初始化，通过gorm
 func InitMysql() {
 	mysqlConfig := config.AppConfig.DataBase
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
@@ -29,6 +30,7 @@ func InitMysql() {
 	log.Println("连接数据库成功")
 }
 
+// InitRedis 初始化redis，使用redis库
 func InitRedis() {
 	redisConfig := config.AppConfig.Redis
 	client := redis.NewClient(&redis.Options{
@@ -36,12 +38,13 @@ func InitRedis() {
 		Password: redisConfig.Password,
 		DB:       redisConfig.DB,
 	})
+	RedisClient = client
 	str, err := client.Ping(context.TODO()).Result()
 	if err != nil {
 		log.Fatalln("redis连接失败", err)
 	}
 	log.Println("str:", str)
-	//RedisClient = client
+
 	log.Println("redis连接成功")
 
 }

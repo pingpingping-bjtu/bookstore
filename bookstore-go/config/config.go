@@ -36,9 +36,8 @@ func InitConfig(path string) {
 	if err != nil {
 		log.Fatalln("读取配置文件失败", err)
 	}
-	if err := yaml.Unmarshal(data, &AppConfig); err != nil {
+	if err = yaml.Unmarshal(data, &AppConfig); err != nil {
 		log.Fatalln("yaml反序列化配置失败", err)
 	}
 	log.Println("加载配置文件成功")
-
 }

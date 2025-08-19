@@ -26,7 +26,7 @@ func UserRegister(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"code":    -1,
 			"message": "参数绑定失败",
-			"errot":   err,
+			"error":   err,
 		})
 	}
 	//TODO:验证码的校验

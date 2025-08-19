@@ -43,7 +43,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login' }) => {
       if (data.code === 0) {
         setCaptchaData({
           captchaId: data.data.captcha_id,
-          captchaBase64: data.data.captcha_base64
+          captchaBase64: data.data.captcha_base_64
         });
       }
     } catch (err) {

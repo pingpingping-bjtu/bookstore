@@ -31,13 +31,20 @@ func InitRouter() *gin.Engine {
 
 		c.Next()
 	})
+
 	v1 := r.Group("api/v1")
 	{
-		user := v1.Group("/usr")
+		user := v1.Group("/user")
 		{
 			user.POST("/register", controller.UserRegister)
 			user.POST("/login", controller.UserLogin)
 		}
+	}
+	//验证图形验证码
+	captcha := v1.Group("/captcha")
+	{
+		captcha.GET("/generate", controller.GenerateCaptcha)
+
 	}
 	return r
 }
