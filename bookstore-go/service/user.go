@@ -5,7 +5,6 @@ import (
 	"bookstore-manager/model"
 	"bookstore-manager/repository"
 	"encoding/base64"
-
 	"errors"
 )
 
@@ -74,7 +73,7 @@ func (u *UserService) UserLogin(username, password string) (*LoginResponse, erro
 		return nil, errors.New("用户不存在！")
 	}
 	//2.如果存在，验证密码是否正确
-	if !u.VersifyPassword(password, user.Password) {
+	if !u.VerifyPassword(password, user.Password) {
 		return nil, errors.New("密码错误")
 	}
 	//3.JWT
@@ -96,7 +95,8 @@ func (u *UserService) UserLogin(username, password string) (*LoginResponse, erro
 	return response, nil
 }
 
-func (u *UserService) VersifyPassword(inputPassword, TruePassword string) bool {
+// VerifyPassword 两个参数都不需要编码
+func (u *UserService) VerifyPassword(inputPassword, TruePassword string) bool {
 	return u.encodePassword(inputPassword) == TruePassword
 }
 
@@ -125,4 +125,27 @@ func (u *UserService) UpdateUserInfo(user *model.User) error {
 		return err
 	}
 	return err
+}
+
+func (u *UserService) ChangePassword(userID int, oldPassword, newPassword string) error {
+	//1.获取对应用户
+	user, err := u.GetUserByID(userID)
+	if err != nil {
+		return errors.New("用户不存在")
+	}
+	//2.验证旧密码
+
+	if !u.VerifyPassword(oldPassword, user.Password) {
+		return errors.New("原密码错误！！！")
+	}
+	//3.编码新密码
+	enPassword := u.encodePassword(newPassword)
+	//4.更新密码
+	user.Password = enPassword
+	err = u.UserDB.UpdateUser(user)
+	if err != nil {
+		return errors.New("密码修改失败")
+	}
+	return nil
+
 }

@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"bookstore-manager/jwt"
 	"bookstore-manager/model"
 	"bookstore-manager/service"
 	"net/http"
@@ -95,7 +96,6 @@ func (u *UserController) UserLogin(ctx *gin.Context) {
 		})
 		return
 	}
-
 	response, err := u.UserService.UserLogin(req.Username, req.Password)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
@@ -195,4 +195,74 @@ func (u *UserController) UpdateUserProfile(c *gin.Context) {
 		"message": "更新用户信息成功",
 	})
 
+}
+
+func (u *UserController) ChangePassword(c *gin.Context) {
+	userID, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"code":    -1,
+			"message": "用户未登录",
+		})
+	}
+	var passwordData struct {
+		OldPassword string `json:"old_password"`
+		NewPassword string `json:"new_password"`
+	}
+
+	if err := c.ShouldBindBodyWithJSON(&passwordData); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    -1,
+			"message": "参数绑定错误",
+			"error":   err.Error(),
+		})
+		return
+	}
+	//前端已经添加长度限制规则，后端不需要
+	//if len(passwordData.NewPassword) < 6 {
+	//	c.JSON(http.StatusBadRequest, gin.H{
+	//		"code":    -1,
+	//		"message": "新密码至少六位",
+	//	})
+	//
+	//	return
+	//}
+	err := u.UserService.ChangePassword(userID.(int), passwordData.OldPassword, passwordData.NewPassword)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    -1,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"code":    0,
+		"data":    passwordData,
+		"message": "密码更新成功",
+	})
+}
+
+func (u *UserController) LogOut(c *gin.Context) {
+	userID, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"code":    -1,
+			"message": "用户未登录",
+		})
+	}
+	//撤销用户的token
+	err := jwt.RevokeToken(uint(userID.(int)))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    -1,
+			"message": "退出登录失败",
+			"error":   err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"code":    0,
+		"message": "退出成功",
+	})
 }
