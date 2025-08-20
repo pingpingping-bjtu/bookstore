@@ -29,6 +29,7 @@ func InitRouter() *gin.Engine {
 
 	userController := controller.NewUserController()
 	captchaController := controller.NewCaptchaController()
+	bookController := controller.NewBookController()
 	v1 := r.Group("api/v1")
 	{
 		user := v1.Group("/user")
@@ -46,7 +47,12 @@ func InitRouter() *gin.Engine {
 				auth.DELETE("/logout", userController.LogOut)
 			}
 		}
-
+		book := v1.Group("/book")
+		{
+			book.GET("/hot", bookController.GetHotBooks)
+			book.GET("/new", bookController.GetNewBooks)
+			book.GET("/list", bookController.GetBookList)
+		}
 	}
 	//验证图形验证码
 	captcha := v1.Group("/captcha")

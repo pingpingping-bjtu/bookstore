@@ -19,7 +19,7 @@ type Book struct {
 	Language    string    `json:"language"`  //语言
 	Format      string    `json:"format"`    //装订本
 	CategoryID  string    `json:"category_id"`
-	Sale        int       `json:"sale"`
+	Sale        int       `json:"sale"` //销量
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
 }
