@@ -52,6 +52,8 @@ func InitRouter() *gin.Engine {
 			book.GET("/hot", bookController.GetHotBooks)
 			book.GET("/new", bookController.GetNewBooks)
 			book.GET("/list", bookController.GetBookList)
+			book.GET("/search", bookController.SearchBook)
+			book.GET("/detail/:id", bookController.GetBookDetail)
 		}
 	}
 	//验证图形验证码

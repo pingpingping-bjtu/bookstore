@@ -27,3 +27,12 @@ func (b *BookService) GetNewBooks(limit int) ([]*model.Book, error) {
 func (b *BookService) GetBookByPage(page int, pageSize int) ([]*model.Book, int64, error) {
 	return b.BookDB.GetBookByPage(page, pageSize)
 }
+
+func (b *BookService) SearchBooksWithPage(keyword string, page int, pageSize int) ([]*model.Book, int64, error) {
+	return b.BookDB.SearchBooksWithPage(keyword, page, pageSize)
+
+}
+
+func (b *BookService) GetBookByID(id int) (*model.Book, error) {
+	return b.BookDB.GetBookByID(id)
+}
