@@ -23,7 +23,7 @@ export const FavoriteProvider = ({ children }) => {
       
       if (response.ok) {
         const data = await response.json();
-        return data.code === 0 && data.data.is_favorited;
+        return data.code === 0 && data.data.is_favorite;
       }
     } catch (error) {
       console.error('检查收藏状态失败:', error);

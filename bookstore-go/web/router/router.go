@@ -30,6 +30,7 @@ func InitRouter() *gin.Engine {
 	userController := controller.NewUserController()
 	captchaController := controller.NewCaptchaController()
 	bookController := controller.NewBookController()
+	favoriteController := controller.NewFavoriteController()
 	v1 := r.Group("api/v1")
 	{
 		user := v1.Group("/user")
@@ -54,6 +55,15 @@ func InitRouter() *gin.Engine {
 			book.GET("/list", bookController.GetBookList)
 			book.GET("/search", bookController.SearchBook)
 			book.GET("/detail/:id", bookController.GetBookDetail)
+		}
+		favorite := v1.Group("/favorite")
+		favorite.Use(middleware.JWTAuthMiddleware())
+		{
+			favorite.POST("/:id", favoriteController.AddFavoriteBook)
+			favorite.DELETE("/:id", favoriteController.RemoveFavoriteBook)
+			favorite.GET("/list", favoriteController.GetFavoriteList)
+			favorite.GET("/:id/check", favoriteController.CheckFavorite)
+			favorite.GET("/count", favoriteController.GetFavoriteCount)
 		}
 	}
 	//验证图形验证码
