@@ -76,3 +76,12 @@ func (b *BookDAO) GetBookByID(id int) (*model.Book, error) {
 	}
 	return book, nil
 }
+
+func (b *BookDAO) GetBookByCategory(category string) ([]*model.Book, error) {
+	var books []*model.Book
+	err := b.db.Debug().Where("status=? AND type=?", 1, category).Find(&books).Error
+	if err != nil {
+		return nil, err
+	}
+	return books, nil
+}

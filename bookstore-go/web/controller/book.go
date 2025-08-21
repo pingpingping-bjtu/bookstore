@@ -139,3 +139,28 @@ func (b *BookController) GetBookDetail(c *gin.Context) {
 	})
 
 }
+
+func (b *BookController) GetBookByCategory(c *gin.Context) {
+	category := c.Param("category")
+	if category == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    -1,
+			"message": "分类不能为空",
+		})
+		return
+	}
+	books, err := b.BookService.GetBookByCategory(category)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    -1,
+			"message": "获取分类书籍失败",
+			"error":   err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"code":    0,
+		"message": "获取分类书籍成功",
+		"data":    books,
+	})
+}
