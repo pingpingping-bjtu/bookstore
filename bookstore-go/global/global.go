@@ -64,3 +64,13 @@ func CloseDB() {
 
 	}
 }
+
+func CloseRedis() {
+	if RedisClient != nil {
+		err := RedisClient.Close()
+		if err != nil {
+			log.Println("redis关闭失败")
+			return
+		}
+	}
+}

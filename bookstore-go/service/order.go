@@ -87,6 +87,28 @@ func (o *OrderService) generateOrderNo() string {
 	return orderNo
 }
 
+func (o *OrderService) GetUserOrders(userID int, page int, pageSize int) ([]*model.Order, int64, error) {
+	return o.OrderDAO.GetUserOrders(userID, page, pageSize)
+}
+
+func (o *OrderService) PayOrder(orderID int) error {
+	//检查订单是否存在
+	order, err := o.getOrderByID(orderID)
+	if err != nil {
+		return err
+	}
+	//检查订单是否被支付
+	if order.IsPaid {
+		return errors.New("订单已经支付")
+	}
+
+	return o.OrderDAO.UpdateOrderStatus(order, orderID)
+}
+
+func (o *OrderService) getOrderByID(orderID int) (*model.Order, error) {
+	return o.OrderDAO.GetOrderByID(orderID)
+}
+
 func NewOrderService() *OrderService {
 	return &OrderService{OrderDAO: repository.NewOrderDAO(), BookDao: repository.NewBookDAO()}
 }
