@@ -4,8 +4,8 @@ tmp_dir = "tmp"
 
 [build]
   args_bin = []
-  bin = "bin/bookstore-manager.exe"
-  cmd = "go build -o bin/bookstore-manager.exe cmd/bookstore-manager/bookstore-manager.go"
+  bin = "bin/admin-manager.exe"
+  cmd = "go build -o bin/admin-manager.exe cmd/admin-manager/admin-manager.go"
   delay = 1000
   exclude_dir = ["assets", "tmp", "vendor", "testdata"]
   exclude_file = []

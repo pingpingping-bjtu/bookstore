@@ -15,7 +15,8 @@ type Config struct {
 	Redis    RedisConfig    `yaml:"redis"`
 }
 type ServerConfig struct {
-	Port int `yaml:"port"`
+	Port      int `yaml:"port"`
+	AdminPort int `yaml:"admin_port"`
 }
 type DataBaseConfig struct {
 	Host     string `yaml:"host"`

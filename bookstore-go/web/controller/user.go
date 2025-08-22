@@ -87,6 +87,7 @@ func (u *UserController) UserLogin(ctx *gin.Context) {
 			"message": "请求参数错误",
 			"error":   err.Error(),
 		})
+		return
 	}
 	captchaSvc := service.NewCaptchaService()
 	if !captchaSvc.VerifyCaptcha(req.CaptchaID, req.CaptchaValue) {
