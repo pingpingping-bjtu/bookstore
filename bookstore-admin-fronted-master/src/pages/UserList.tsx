@@ -201,8 +201,8 @@ const UserList: React.FC = () => {
     },
     {
       title: '管理员',
-      dataIndex: 'is_admin',
-      key: 'is_admin',
+      dataIndex: 'isAdmin',
+      key: 'isAdmin',
       width: 100,
       render: (isAdmin: boolean) => (
         <Tag color={isAdmin ? 'green' : 'default'} style={{ borderRadius: 12 }}>

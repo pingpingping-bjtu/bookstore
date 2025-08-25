@@ -28,7 +28,8 @@ func InitAdminRouter() *gin.Engine {
 	})
 	adminUserController := controller.NewAdminUserController()
 	adminDashboardController := controller.NewAdminDashboardController()
-	adminCategories := controller.NewAdminCategoryController()
+	adminCategoriesController := controller.NewAdminCategoryController()
+
 	v1 := r.Group("/api/v1")
 	{
 		login := v1.Group("/admin/auth")
@@ -43,10 +44,20 @@ func InitAdminRouter() *gin.Engine {
 			//分类路由
 			categories := admin.Group("/categories")
 			{
-				categories.GET("/list", adminCategories.GetAdminCategories)
-				categories.POST("/create", adminCategories.CreateAdminCategories)
-				categories.PUT("/:id", adminCategories.UpdateAdminCategories)
-				categories.DELETE("/:id", adminCategories.DeleteAdminCategory)
+				categories.GET("/list", adminCategoriesController.GetAdminCategories)
+				categories.POST("/create", adminCategoriesController.CreateAdminCategories)
+				categories.PUT("/:id", adminCategoriesController.UpdateAdminCategories)
+				categories.DELETE("/:id", adminCategoriesController.DeleteAdminCategory)
+			}
+			//用户管理路由
+			users := admin.Group("/users")
+			{
+				users.GET("/list", adminUserController.GetUsersList)
+
+				users.PUT("/:id/status", adminUserController.UpdateUserStatus)
+				users.POST("/create", adminUserController.CreateUser)
+				users.DELETE("/:id", adminUserController.DeleteUser)
+				users.PUT("/:id", adminUserController.UpdateUser)
 			}
 		}
 
