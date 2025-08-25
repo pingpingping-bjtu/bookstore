@@ -28,6 +28,7 @@ func InitAdminRouter() *gin.Engine {
 	})
 	adminUserController := controller.NewAdminUserController()
 	adminDashboardController := controller.NewAdminDashboardController()
+	adminCategories := controller.NewAdminCategoryController()
 	v1 := r.Group("/api/v1")
 	{
 		login := v1.Group("/admin/auth")
@@ -38,6 +39,15 @@ func InitAdminRouter() *gin.Engine {
 		admin.Use(middleware.JWTAuthMiddleware())
 		{
 			admin.GET("/dashboard/stats", adminDashboardController.GetDashboardStats)
+
+			//分类路由
+			categories := admin.Group("/categories")
+			{
+				categories.GET("/list", adminCategories.GetAdminCategories)
+				categories.POST("/create", adminCategories.CreateAdminCategories)
+				categories.PUT("/:id", adminCategories.UpdateAdminCategories)
+				categories.DELETE("/:id", adminCategories.DeleteAdminCategory)
+			}
 		}
 
 	}
