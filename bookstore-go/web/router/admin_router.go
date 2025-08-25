@@ -2,6 +2,7 @@ package router
 
 import (
 	"bookstore-manager/web/controller"
+	"bookstore-manager/web/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -26,12 +27,19 @@ func InitAdminRouter() *gin.Engine {
 		c.Next()
 	})
 	adminUserController := controller.NewAdminUserController()
+	adminDashboardController := controller.NewAdminDashboardController()
 	v1 := r.Group("/api/v1")
 	{
-		admin := v1.Group("/admin")
+		login := v1.Group("/admin/auth")
 		{
-			admin.POST("/auth/login", adminUserController.AdminUserLogin)
+			login.POST("/login", adminUserController.AdminUserLogin)
 		}
+		admin := v1.Group("/admin")
+		admin.Use(middleware.JWTAuthMiddleware())
+		{
+			admin.GET("/dashboard/stats", adminDashboardController.GetDashboardStats)
+		}
+
 	}
 	return r
 }

@@ -6,7 +6,7 @@ type Book struct {
 	ID          int       `gorm:"primaryKey" json:"id"`
 	Title       string    `json:"title"`       //书名
 	Author      string    `json:"author"`      //作者
-	Price       string    `json:"price"`       //价格
+	Price       int       `json:"price"`       //价格
 	Discount    string    `json:"discount"`    //折扣
 	Type        string    `json:"type"`        //类型
 	Stock       int       `json:"stock"`       //库存
