@@ -53,7 +53,6 @@ func InitAdminRouter() *gin.Engine {
 			users := admin.Group("/users")
 			{
 				users.GET("/list", adminUserController.GetUsersList)
-
 				users.PUT("/:id/status", adminUserController.UpdateUserStatus)
 				users.POST("/create", adminUserController.CreateUser)
 				users.DELETE("/:id", adminUserController.DeleteUser)
