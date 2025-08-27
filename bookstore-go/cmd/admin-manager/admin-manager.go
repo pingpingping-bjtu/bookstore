@@ -24,8 +24,8 @@ func main() {
 	//设置优雅关闭
 
 	//启动web服务
-	r := router.InitRouter()
-	addr := fmt.Sprintf("%s:%d", "localhost", cfg.Server.AdminPort)
+	r := router.InitAdminRouter()
+	addr := fmt.Sprintf("localhost:%d", cfg.Server.AdminPort)
 	server := http.Server{
 		Addr:    addr,
 		Handler: r,
@@ -40,7 +40,7 @@ func main() {
 
 	//在goroutine中启动服务器
 	go func() {
-		log.Printf("Server running at http://localhost%s", addr)
+		log.Printf("Server running at http://%s", addr)
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("Failed to run server: %v", err)
 		}
