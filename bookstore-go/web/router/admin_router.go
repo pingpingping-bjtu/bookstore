@@ -29,7 +29,7 @@ func InitAdminRouter() *gin.Engine {
 	adminUserController := controller.NewAdminUserController()
 	adminDashboardController := controller.NewAdminDashboardController()
 	adminCategoriesController := controller.NewAdminCategoryController()
-
+	adminBookController := controller.NewAdminBookController()
 	v1 := r.Group("/api/v1")
 	{
 		login := v1.Group("/admin/auth")
@@ -58,6 +58,17 @@ func InitAdminRouter() *gin.Engine {
 				users.DELETE("/:id", adminUserController.DeleteUser)
 				users.PUT("/:id", adminUserController.UpdateUser)
 			}
+			//图书管理
+			books := admin.Group("/books")
+			{
+				books.GET("/list", adminBookController.GetBookList)
+				books.GET("/:id", adminBookController.GetBookByID)
+				books.POST("/create", adminBookController.CreateBook)
+				books.PUT("/:id", adminBookController.UpdateBook)
+				books.DELETE("/:id", adminBookController.DeleteBook)
+				books.PUT("/:id/status", adminBookController.UpdateBookStatus)
+			}
+
 		}
 
 	}
